@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from "react";
 import { Link, Redirect} from "react-router-dom";
 import CompanyCard from './CompanyCard';
-import JoblyApi from './api'
+import JoblyApi from './api/api'
 import { Form, Row, Col, Label, Input, Button} from "reactstrap";
 import './CompaniesList.css';
 import UserContext from "./UserContext";

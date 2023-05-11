@@ -4,7 +4,7 @@ import Home from "./Home";
 import CompaniesList from "./CompaniesList";
 import JobsList from "./JobsList";
 import CompanyDetail from "./CompanyDetail";
-import LoginForm from "./LoginForm";
+import LoginForm from "./auth-forms/LoginForm";
 import SignupForm from "./SignupForm";
 import ProfileEditForm from "./ProfileEditForm";
 

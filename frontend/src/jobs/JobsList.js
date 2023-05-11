@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from "react";
-import JoblyApi from './api';
+import JoblyApi from './api/api';
 import { Redirect } from "react-router-dom";
 import { Form, Row, Col, Label, Input, Button} from "reactstrap";
 import JobCard from "./JobCard";

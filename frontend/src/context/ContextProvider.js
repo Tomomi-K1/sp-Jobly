@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import JoblyApi from "./api";
+import JoblyApi from "../api/api";
 import UserContext from './UserContext';
-import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+import useLocalStorage from "../hooks/useLocalStorage";
+import jwt from "jsonwebtoken";
+
 
 /* context provider : 
       -holds current User information 
@@ -12,6 +14,7 @@ import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
       
 */ 
 const ContextProvider = ({children}) => {
+    const [isLoading, setIsLoading] = useState(true);
     const initialState = null;
     const [currUser, setCurrUser] = useState(() => {
         let value;
@@ -25,34 +28,36 @@ const ContextProvider = ({children}) => {
             window.localStorage.getItem('token')) || null
         return value;
     });
-    const [isLoading, setIsLoading] = useState(true);
+    
 
-    useEffect(() => {
-        // funtion to make API call to get userinfomation
-        async function getUserInfo(currUser){
-            try{
-                const user= await JoblyApi.getUser(currUser);
-                setCurrUser(currUser => user);
-            } catch(e){
-                console.log(e);
+    useEffect(function loadUserInfo(){
+        console.debug('ContextProvider useEffect to loadUserInfo', "token=", token)
+        async function getUserInfo(){
+            if(token){
+                try{
+                    let {username} = jwt.decode(token);
+                    // need username to make API call to get a specific user's information
+                    const user= await JoblyApi.getUser(username);
+                    setCurrUser(user);
+                    //JoblyApi will be removed when a page is refreshed.so reassign token here.
+                    JoblyApi.token = token;
+                } catch(e){
+                    console.error("App loadUserInfo: problem loading",e);
+                    setCurrUser(null);
+                }
             }
         }
         
-        //JoblyApi will be removed when a page is refreshed.so reassign token here.
-        JoblyApi.token = token;
         // put token info in local storage
-        window.localStorage.setItem('token', JSON.stringify(token));
+        // window.localStorage.setItem('token', JSON.stringify(token));
         // get username from localstorage to make API call to get user.
-        let user =JSON.parse(window.localStorage.getItem('username'));   
-        getUserInfo(user);
+        // let user =JSON.parse(window.localStorage.getItem('username'));   
+        getUserInfo();
         setIsLoading(false);
         console.log( `JoblyApi token:${JoblyApi.token}, currentUser:${currUser}, token:${token}`);
-
     }, [token])
   
-    if (isLoading) {
-      return <p>Loading &hellip;</p>;
-    }
+    
 
     const login = async (username, password) => {
         const token= await JoblyApi.loginUser(username, password);
@@ -64,7 +69,7 @@ const ContextProvider = ({children}) => {
     const logout =() => {
         JoblyApi.token='';
         setCurrUser(null);
-        setToken(t=>"");
+        setToken(null);
         window.localStorage.clear();
         
     }
@@ -88,7 +93,12 @@ const ContextProvider = ({children}) => {
             ...currUser
         }))
     }
-      
+
+    if (isLoading) {
+        return <p>Loading &hellip;</p>;
+      //   I could create "<LoadingSpinner /> component "
+      }
+     
     return(
         <UserContext.Provider value={{currUser, login, logout, signup, updateUserInfo, applyJob}}>
             {children}

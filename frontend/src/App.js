@@ -1,12 +1,10 @@
 import './App.css';
-
 import React from 'react';
 import { BrowserRouter } from "react-router-dom";
 
-import NavBar from './NavBar';
-import Routes from './Routes';
-import ContextProvider from './ContextProvider';
-
+import NavBar from './routes-nav/NavBar';
+import Routes from './routes-nav/Routes';
+import ContextProvider from './context/ContextProvider';
 
 
 function App() {
