@@ -39,6 +39,10 @@ const CompaniesList =() => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(searchTerm.name ===''){
+            let resCompanies =await JoblyApi.getCompanies();
+            setCompanies(c=>resCompanies);
+        }
         let resCompanies =await JoblyApi.getCompanies(searchTerm);
         setCompanies(c=>resCompanies);
 
@@ -50,7 +54,7 @@ const CompaniesList =() => {
     } else{
         return (
             <div className="CompaniesList-container">
-                <Form>
+                <Form onSubmit={handleSubmit}>
                     <Row className="justify-content-md-center align-items-center">
                         <Col md={9}>
                             <Label className="visually-hidden" for="searchTerm">
@@ -65,7 +69,7 @@ const CompaniesList =() => {
                             </Input>
                         </Col>
                         <Col md={3}>
-                            <Button onClick={handleSubmit}>Search by Company Name</Button>
+                            <Button>Search by Company Name</Button>
                         </Col>
                     </Row>
                 </Form> 

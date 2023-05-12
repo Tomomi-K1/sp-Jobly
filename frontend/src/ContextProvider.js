@@ -69,13 +69,13 @@ const ContextProvider = ({children}) => {
         setCurrUser(null);
         setToken(t=>"");
         window.localStorage.clear();
-        
     }
     const signup = async (data) => {
         const token=await JoblyApi.registerUser(data);
+        window.localStorage.setItem('username', JSON.stringify(data.username));
         JoblyApi.token = token;
-        setToken(t => token);
-        setCurrUser(user=> data.username )
+        setToken(token);
+        setCurrUser(data.username);
     }
 
     const updateUserInfo = async (username, data) => {

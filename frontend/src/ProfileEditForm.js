@@ -29,7 +29,7 @@ const ProfileEditForm = () => {
          }
     }
     return(
-        <Form>
+        <Form onSubmit={handleSubmit}>
         <h3>Your Profile</h3>
         <FormGroup>
             <Label htmlFor="username"> Username </Label>
@@ -47,7 +47,7 @@ const ProfileEditForm = () => {
             <Label htmlFor="email"> Email </Label>
             <Input id="email" type="email" name="email" value={formData.email} onChange={handleChange} />
         </FormGroup>
-        <Button onClick={handleSubmit}>Submit</Button>
+        <Button>Submit</Button>
     </Form>
     ) 
 }

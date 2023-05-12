@@ -39,14 +39,14 @@ const SignupForm = () => {
     }
 
     return (
-        <Form>
+        <Form onSubmit={handleSubmit}>
             <FormGroup>
                 <Label htmlFor="username"> Username </Label>
                 <Input id="username" type="text" name="username" value={formData.username} onChange={handleChange} />
             </FormGroup>
             <FormGroup>
                 <Label htmlFor="password"> Password </Label>
-                <Input id="password" type="text" name="password" value={formData.password} onChange={handleChange} />
+                <Input id="password" type="password" name="password" value={formData.password} onChange={handleChange} />
             </FormGroup>
             <FormGroup>
                 <Label htmlFor="firstName"> First Name </Label>
@@ -60,7 +60,7 @@ const SignupForm = () => {
                 <Label htmlFor="email"> email </Label>
                 <Input id="email" type="email" name="email" value={formData.email} onChange={handleChange} />
             </FormGroup>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button>Submit</Button>
         </Form>
     )
 }

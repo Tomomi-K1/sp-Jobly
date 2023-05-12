@@ -52,7 +52,7 @@ const LoginForm = () => {
                 <Label htmlFor="password"> Password </Label>
                 <Input id="password" type="text" name="password" value={formData.password} onChange={handleChange} />
             </FormGroup>
-            <Button >Submit</Button>
+            <Button>Submit</Button>
         </Form>
     )
 }
