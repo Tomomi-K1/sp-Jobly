@@ -14,6 +14,7 @@ const SignupForm = () => {
         email: ""
     }
     const [formData, setFormData] = useState(initialState);
+    const [isLoading, setIsLoading] = useState(false);
 
     const {signup} = useContext(UserContext);
     const history = useHistory();
@@ -28,14 +29,20 @@ const SignupForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault(); 
+        setIsLoading(true);
         try{   
             await signup(formData);
             setFormData(formdata=>initialState)
             history.push('/')
         } catch(e){
             alert(e);
+            setIsLoading(false);
             setFormData(formdata=>initialState)
         }
+    }
+
+    if(isLoading){
+        return <h1>Loading...</h1>
     }
 
     return (
