@@ -10,6 +10,7 @@ const LoginForm = () => {
         password:""
     }
     const [formData, setFormData] = useState(initialState);
+    const [isLoading, setIsLoading] = useState(false);
 
     const {login} = useContext(UserContext);
     const history = useHistory();
@@ -24,6 +25,7 @@ const LoginForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault(); 
+        setIsLoading(true);
         try{
             await login(formData.username, formData.password);
             setFormData(initialState);
@@ -32,12 +34,16 @@ const LoginForm = () => {
         
         }catch(e){
             alert(e)
+            setIsLoading(false);
             setFormData(initialState);
         } 
     }
 
+    if(isLoading){
+        return <h1> Loading... </h1>
+    }
     return (
-        <Form>
+        <Form onSubmit={handleSubmit}>
             <FormGroup>
                 <Label htmlFor="username"> Username </Label>
                 <Input id="username" type="text" name="username" value={formData.username} onChange={handleChange} />
@@ -46,7 +52,7 @@ const LoginForm = () => {
                 <Label htmlFor="password"> Password </Label>
                 <Input id="password" type="text" name="password" value={formData.password} onChange={handleChange} />
             </FormGroup>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button >Submit</Button>
         </Form>
     )
 }

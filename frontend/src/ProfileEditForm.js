@@ -4,9 +4,9 @@ import UserContext from "./UserContext";
 
 const ProfileEditForm = () => {
     const {currUser, updateUserInfo} = useContext(UserContext);
-    const [formData, setformData] = useState({
+    const [formData, setformData] = useState(()=>({
         ...currUser
-    })
+    }))
 
     const handleChange =(e) => {
         const {name, value} = e.target;

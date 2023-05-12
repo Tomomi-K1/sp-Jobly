@@ -15,24 +15,25 @@ const ContextProvider = ({children}) => {
     const initialState = null;
     const [currUser, setCurrUser] = useState(() => {
         let value;
-        value =JSON.parse(
-            window.localStorage.getItem('username')) || initialState;
+        value = localStorage.getItem('username') || initialState;
         return value;
     });
     const [token, setToken] = useState(() => {
         let value;
-        value =JSON.parse(
-            window.localStorage.getItem('token')) || null
+        value = localStorage.getItem('token') || null
         return value;
     });
     const [isLoading, setIsLoading] = useState(true);
+    const [applications, setApplications] = useState();
 
     useEffect(() => {
+        console.debug('useEffect in Context run after token change')
         // funtion to make API call to get userinfomation
         async function getUserInfo(currUser){
             try{
                 const user= await JoblyApi.getUser(currUser);
-                setCurrUser(currUser => user);
+                setApplications(new Set(user.applications));
+                setCurrUser(currUser => user);                
             } catch(e){
                 console.log(e);
             }
@@ -41,9 +42,11 @@ const ContextProvider = ({children}) => {
         //JoblyApi will be removed when a page is refreshed.so reassign token here.
         JoblyApi.token = token;
         // put token info in local storage
-        window.localStorage.setItem('token', JSON.stringify(token));
+        if(!localStorage.getItem('token')){
+            localStorage.setItem('token', token);
+        }
         // get username from localstorage to make API call to get user.
-        let user =JSON.parse(window.localStorage.getItem('username'));   
+        let user =JSON.parse(localStorage.getItem('username')); 
         getUserInfo(user);
         setIsLoading(false);
         console.log( `JoblyApi token:${JoblyApi.token}, currentUser:${currUser}, token:${token}`);
@@ -77,13 +80,16 @@ const ContextProvider = ({children}) => {
 
     const updateUserInfo = async (username, data) => {
         const user =await JoblyApi.updateUser(username, data);
+        user.applications = [...applications];
         setCurrUser(u=>user);
+        alert('your profile is updated');
     }
 
     const applyJob = async (username, jobId) =>{
         const appliedJobId = await JoblyApi.userApplyJob(username, jobId);
         console.log(`appliedjobId: ${appliedJobId}`);
         currUser.applications.push(appliedJobId);
+        setApplications(new Set([...applications, appliedJobId]));
         setCurrUser(user=>({
             ...currUser
         }))
