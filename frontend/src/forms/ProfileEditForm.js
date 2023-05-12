@@ -1,6 +1,6 @@
 import React, {useState, useContext} from "react";
 import {Form, FormGroup, Label, Input, Button} from "reactstrap";
-import UserContext from "./UserContext";
+import UserContext from "../context/UserContext";
 
 const ProfileEditForm = () => {
     const {currUser, updateUserInfo} = useContext(UserContext);
@@ -28,6 +28,8 @@ const ProfileEditForm = () => {
             alert(e);
          }
     }
+
+    
     return(
         <Form>
         <h3>Your Profile</h3>
@@ -53,3 +55,18 @@ const ProfileEditForm = () => {
 }
 
 export default ProfileEditForm;
+
+/* improvement I can make 
+instead of repeating <FromGrup>, create an array to map to create each <FormGroup> as below. 
+
+let array =[{id:"username", label:"Username", value:formData.username}, {id:"firstName", label:"First Name"}]
+{array.map(item =>{
+    return(
+        <FormGroup>
+        <Label htmlFor={item.id}>{item.label}</Label>
+        <Input id={item.id} type="text" name={item.id} value={item.value} onChange={handleChange} disabled/>
+        </FormGroup>   
+    )
+})}
+
+*/

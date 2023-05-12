@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import JoblyApi from "../api/api";
 import UserContext from './UserContext';
 import useLocalStorage from "../hooks/useLocalStorage";
-import jwt from "jsonwebtoken";
-
+import { useJwt } from "react-jwt";
+// Key name for storing token in localStorage for "remember me" re-login
+export const TOKEN_STORAGE_ID = "token";
 
 /* context provider : 
       -holds current User information 
@@ -15,19 +16,11 @@ import jwt from "jsonwebtoken";
 */ 
 const ContextProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(true);
-    const initialState = null;
-    const [currUser, setCurrUser] = useState(() => {
-        let value;
-        value =JSON.parse(
-            window.localStorage.getItem('username')) || initialState;
-        return value;
-    });
-    const [token, setToken] = useState(() => {
-        let value;
-        value =JSON.parse(
-            window.localStorage.getItem('token')) || null
-        return value;
-    });
+    const [currUser, setCurrUser] = useState(null);
+    // created set to avoid duplicate jobId being added to users application property
+    const [applicationIds, setApplicationIds] = useState(new Set([]));
+    const [token, setToken] = useLocalStorage(TOKEN_STORAGE_ID);
+    const { decodedToken } = useJwt(token);
     
 
     useEffect(function loadUserInfo(){
@@ -35,10 +28,12 @@ const ContextProvider = ({children}) => {
         async function getUserInfo(){
             if(token){
                 try{
-                    let {username} = jwt.decode(token);
+                    let {username} = decodedToken;
+                    console.log(`decoded from token username: ${username}`)
                     // need username to make API call to get a specific user's information
                     const user= await JoblyApi.getUser(username);
                     setCurrUser(user);
+                    setApplicationIds(new Set(user.applications))
                     //JoblyApi will be removed when a page is refreshed.so reassign token here.
                     JoblyApi.token = token;
                 } catch(e){
@@ -47,37 +42,45 @@ const ContextProvider = ({children}) => {
                 }
             }
         }
-        
-        // put token info in local storage
-        // window.localStorage.setItem('token', JSON.stringify(token));
-        // get username from localstorage to make API call to get user.
-        // let user =JSON.parse(window.localStorage.getItem('username'));   
         getUserInfo();
         setIsLoading(false);
-        console.log( `JoblyApi token:${JoblyApi.token}, currentUser:${currUser}, token:${token}`);
+
     }, [token])
   
-    
-
-    const login = async (username, password) => {
-        const token= await JoblyApi.loginUser(username, password);
-        window.localStorage.setItem('username', JSON.stringify(username));
-        JoblyApi.token = token;
-        setToken(t => token);
-        setCurrUser(user=> username)
+    /* LOGIN site-wide 
+    * Make sure you await this function and check its return value!*/
+    const login = async (data) => {
+        try{
+            const token= await JoblyApi.loginUser(data);
+            setToken(token);
+            console.log(token);
+            return { success: true };
+            // JoblyApi.token = token;        
+            // setCurrUser(user=> username)
+            // when setToken runs, loadUserInfo runs so no need to put JoblyApi.token=token nor setCurrUser;
+        }catch(errors){
+            console.error("login failed", errors);
+            return {success: false, errors};
+        }
     }
+    /* LOGOUT site-wide */
     const logout =() => {
         JoblyApi.token='';
         setCurrUser(null);
+        // setToken to "null". This should trigger useLocalStorage hook to remove key since [item] is null.
         setToken(null);
-        window.localStorage.clear();
-        
     }
+
+    /* SIGNUP sitewide signup */
     const signup = async (data) => {
-        const token=await JoblyApi.registerUser(data);
-        JoblyApi.token = token;
-        setToken(t => token);
-        setCurrUser(user=> data.username )
+        try{
+            const token=await JoblyApi.registerUser(data);
+            setToken(token);
+            return { success: true};
+        } catch(errors){
+            console.error('signup failed', errors);
+            return { success: false, errors};
+        }
     }
 
     const updateUserInfo = async (username, data) => {
@@ -85,13 +88,18 @@ const ContextProvider = ({children}) => {
         setCurrUser(u=>user);
     }
 
-    const applyJob = async (username, jobId) =>{
-        const appliedJobId = await JoblyApi.userApplyJob(username, jobId);
-        console.log(`appliedjobId: ${appliedJobId}`);
-        currUser.applications.push(appliedJobId);
-        setCurrUser(user=>({
-            ...currUser
-        }))
+    /*====Job Application related =====
+    Has Applied? : checks if jobId is already in user's applications array.*/
+    const hasApplied = (jobId) => {
+        return applicationIds.has(jobId);
+    }
+
+    /*Apply to JOB: make API call and update user's info inside user object `application:[]` property*/
+    const applyJob = async (jobId) =>{
+        // if jobId already exists in user's applications array, do nothing.
+        if(hasApplied(jobId)) return;
+        await JoblyApi.userApplyJob(currUser.username, jobId);
+        setApplicationIds(new Set([...applicationIds, jobId]))
     }
 
     if (isLoading) {

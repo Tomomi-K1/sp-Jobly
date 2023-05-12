@@ -1,7 +1,7 @@
 import React, {useContext, useState} from "react";
 import {Form, FormGroup, Label, Input, Button} from "reactstrap";
 import { useHistory } from "react-router-dom";
-import UserContext from "../UserContext";
+import UserContext from "../context/UserContext";
 
 
 const LoginForm = () => {
@@ -10,34 +10,32 @@ const LoginForm = () => {
         password:""
     }
     const [formData, setFormData] = useState(initialState);
+    const [formErrors, setFormErrors] = useState([]);
 
     const {login} = useContext(UserContext);
     const history = useHistory();
 
     const handleChange = (e) => {
         const {name, value} = e.target;
-        setFormData(formData =>({
-            ...formData,
-            [name]: value 
-        })) 
+        setFormData(formData =>({...formData, [name]: value })) 
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault(); 
-        try{
-            await login(formData.username, formData.password);
-            setFormData(initialState);
+        let result= await login(formData);    
+        setFormData(initialState);
+        if(result.success){
             console.log(`login successful`)
             history.push('/');
-        
-        }catch(e){
-            alert(e)
-            setFormData(initialState);
+        } else {
+            // errors will come from login function created inside ContextProvider.
+            // func:login =>return {success:false, errors}
+            setFormErrors(result.errors)   
         } 
     }
 
     return (
-        <Form>
+        <Form onSubmit ={handleSubmit}>
             <FormGroup>
                 <Label htmlFor="username"> Username </Label>
                 <Input id="username" type="text" name="username" value={formData.username} onChange={handleChange} />
@@ -46,7 +44,7 @@ const LoginForm = () => {
                 <Label htmlFor="password"> Password </Label>
                 <Input id="password" type="text" name="password" value={formData.password} onChange={handleChange} />
             </FormGroup>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button>Submit</Button>
         </Form>
     )
 }

@@ -1,25 +1,26 @@
 import React, {useState, useEffect, useContext} from "react";
 import { useParams, Redirect } from "react-router-dom";
-import JoblyApi from './api/api'
-import JobCard from "./JobCard";
-import UserContext from "./UserContext";
+import JoblyApi from '../api/api'
+import JobCard from "../jobs/JobCard";
+import UserContext from "../context/UserContext";
 
 const CompanyDetail = () => {
     const {currUser} = useContext(UserContext);
     const {companyName} = useParams();
-    const [company, setCompany] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [company, setCompany] = useState(null);
+
+    
     useEffect(() => {
         console.log(`useEffect in CompanyDetail ran`);
         async function getCompanyInfo(){
-        const resCompanies = await JoblyApi.getCompany(companyName);
-        setCompany(c=>resCompanies);
-        setIsLoading(isLoading => !isLoading);
+            const resCompanies = await JoblyApi.getCompany(companyName);
+            setCompany(c=>resCompanies);
+
         }    
         getCompanyInfo();
     }, [])
 
-    if(isLoading){
+    if(!company){
         return <h1>Loading...</h1>
     }
 

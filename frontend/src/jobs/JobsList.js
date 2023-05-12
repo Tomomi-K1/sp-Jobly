@@ -1,30 +1,28 @@
 import React, {useState, useEffect, useContext} from "react";
-import JoblyApi from './api/api';
+import JoblyApi from '../api/api';
 import { Redirect } from "react-router-dom";
 import { Form, Row, Col, Label, Input, Button} from "reactstrap";
 import JobCard from "./JobCard";
-import UserContext from './UserContext';
+import UserContext from '../context/UserContext';
 
 const JobsList = () => {
     const {currUser} = useContext(UserContext);
     const [jobs, setJobs] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
     const initialState = { title : "" }
     const [searchTerm, setSearchTerm] = useState(initialState);
     
     useEffect(() => {
         console.log(`useEffect in JobsList ran`);
         async function getJobsList(){
-        const resCompanies = await JoblyApi.getJobs();
-        setJobs(c=>resCompanies);
-        setIsLoading(isLoading => !isLoading);
+            const resCompanies = await JoblyApi.getJobs();
+            setJobs(c=>resCompanies);
         }
         
         getJobsList();
         
     }, [])
 
-    if(isLoading){
+    if(!jobs){
         return <h1>Loading...</h1>
     }
 

@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import UserContext from '../UserContext';
+import UserContext from '../context/UserContext';
 import { Card, CardBody, CardTitle, CardText, Button} from "reactstrap";
 
 
@@ -8,7 +8,7 @@ const JobCard = ({job}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        applyJob(currUser.username, job.id)
+        applyJob(job.id)
     }
 
     return(

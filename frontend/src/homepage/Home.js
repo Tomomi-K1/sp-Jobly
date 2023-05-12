@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
-import UserContext from './UserContext';
+import UserContext from '../context/UserContext';
 import './Home.css';
 
 const Home = () => {

@@ -1,33 +1,32 @@
 import React, {useState, useEffect, useContext} from "react";
 import { Link, Redirect} from "react-router-dom";
 import CompanyCard from './CompanyCard';
-import JoblyApi from './api/api'
+import JoblyApi from '../api/api'
 import { Form, Row, Col, Label, Input, Button} from "reactstrap";
 import './CompaniesList.css';
-import UserContext from "./UserContext";
+import UserContext from "../context/UserContext";
 
 const CompaniesList =() => {
     const {currUser} = useContext(UserContext);
-    const [companies, setCompanies] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [companies, setCompanies] = useState(null);
     const initialState = { name : "" }
     const [searchTerm, setSearchTerm] = useState(initialState);
+    
     useEffect(() => {
         console.log(`useEffect in CompaniesList ran`);
+        
         async function getCompaniesList(){
-        const resCompanies = await JoblyApi.getCompanies();
-        setCompanies(c=>resCompanies);
-        setIsLoading(isLoading => !isLoading);
+            const resCompanies = await JoblyApi.getCompanies();
+            setCompanies(c=>resCompanies);
         }
         
         getCompaniesList();
         
     }, [])
 
-    if(isLoading){
+    if(!companies){
         return <h1>Loading...</h1>
     }
-    // console.log(companies);
 
     const handleChange =(e) => {
         const {name, value} = e.target;
