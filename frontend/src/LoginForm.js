@@ -50,7 +50,7 @@ const LoginForm = () => {
             </FormGroup>
             <FormGroup>
                 <Label htmlFor="password"> Password </Label>
-                <Input id="password" type="text" name="password" value={formData.password} onChange={handleChange} />
+                <Input id="password" type="password" name="password" value={formData.password} onChange={handleChange} />
             </FormGroup>
             <Button>Submit</Button>
         </Form>

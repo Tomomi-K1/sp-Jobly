@@ -81,7 +81,7 @@ const ContextProvider = ({children}) => {
     const updateUserInfo = async (username, data) => {
         const user =await JoblyApi.updateUser(username, data);
         user.applications = [...applications];
-        setCurrUser(u=>user);
+        setCurrUser(user);
         alert('your profile is updated');
     }
 

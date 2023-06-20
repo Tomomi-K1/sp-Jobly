@@ -4,6 +4,7 @@ import UserContext from "./UserContext";
 
 const ProfileEditForm = () => {
     const {currUser, updateUserInfo} = useContext(UserContext);
+    console.log(currUser);
     const [formData, setformData] = useState(()=>({
         ...currUser
     }))
@@ -28,6 +29,7 @@ const ProfileEditForm = () => {
             alert(e);
          }
     }
+
     return(
         <Form onSubmit={handleSubmit}>
         <h3>Your Profile</h3>
