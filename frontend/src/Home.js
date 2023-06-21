@@ -17,7 +17,7 @@ const Home = () => {
                     <Button color="secondary" className="mx-2"><Link to="/Signup">Signup</Link></Button>
                 </div>
     return(
-        <div className ='Home-container'>
+        <div className ='Home-container full-height'>
             <h1>Welcome to Jobly!</h1>
             {content}
         </div>

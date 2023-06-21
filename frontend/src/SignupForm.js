@@ -40,35 +40,46 @@ const SignupForm = () => {
             setFormData(formdata=>initialState)
         }
     }
-
+    
     if(isLoading){
-        return <h1>Loading...</h1>
+        return(
+            <div className="full-height">
+                <h1>Loading...</h1>
+            </div>
+        ) 
     }
-
     return (
-        <Form onSubmit={handleSubmit}>
-            <FormGroup>
-                <Label htmlFor="username"> Username </Label>
-                <Input id="username" type="text" name="username" value={formData.username} onChange={handleChange} />
-            </FormGroup>
-            <FormGroup>
-                <Label htmlFor="password"> Password </Label>
-                <Input id="password" type="password" name="password" value={formData.password} onChange={handleChange} />
-            </FormGroup>
-            <FormGroup>
-                <Label htmlFor="firstName"> First Name </Label>
-                <Input id="firstName" type="text" name="firstName" value={formData.firstName} onChange={handleChange} />
-            </FormGroup>
-            <FormGroup>
-                <Label htmlFor="lastName"> Last Name  </Label>
-                <Input id="lastName" type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
-            </FormGroup>
-            <FormGroup>
-                <Label htmlFor="email"> email </Label>
-                <Input id="email" type="email" name="email" value={formData.email} onChange={handleChange} />
-            </FormGroup>
-            <Button>Submit</Button>
-        </Form>
+    
+        <div className ='col-mid-6 col-lg-4 offset-md-3 offset-lg-4 full-height'>
+            <h3>Signup</h3>
+            <div className='card'>
+                <div className='card-body'>
+                    <Form onSubmit={handleSubmit}>
+                        <FormGroup>
+                            <Label htmlFor="username"> Username </Label>
+                            <Input id="username" type="text" name="username" value={formData.username} onChange={handleChange} />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label htmlFor="password"> Password </Label>
+                            <Input id="password" type="password" name="password" value={formData.password} onChange={handleChange} />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label htmlFor="firstName"> First Name </Label>
+                            <Input id="firstName" type="text" name="firstName" value={formData.firstName} onChange={handleChange} />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label htmlFor="lastName"> Last Name  </Label>
+                            <Input id="lastName" type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label htmlFor="email"> email </Label>
+                            <Input id="email" type="email" name="email" value={formData.email} onChange={handleChange} />
+                        </FormGroup>
+                        <Button>Submit</Button>
+                    </Form>
+                </div>
+            </div>
+        </div>
     )
 }
 
