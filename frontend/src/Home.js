@@ -8,7 +8,7 @@ const Home = () => {
     const {currUser} = useContext(UserContext);
     const content = currUser?
                 <div>
-                    <h1>Hi {currUser.username}</h1>
+                    <h2>Hi <span>{currUser.username}</span></h2>
                     <p>Search your future jobs here!</p>
                 </div>:
                 <div>
@@ -17,7 +17,7 @@ const Home = () => {
                     <Button color="secondary" className="mx-2"><Link to="/Signup">Signup</Link></Button>
                 </div>
     return(
-        <div>
+        <div className ='Home-container'>
             <h1>Welcome to Jobly!</h1>
             {content}
         </div>

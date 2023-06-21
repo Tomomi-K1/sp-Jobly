@@ -4,8 +4,9 @@ nav {
   }
   
   .nav-item {
-    width: 100px;
+    width: auto;
     text-align: center;
+    margin: 10px;
   }
   
   nav a {
