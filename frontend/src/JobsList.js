@@ -25,7 +25,11 @@ const JobsList = () => {
     }, [])
 
     if(isLoading){
-        return <h1>Loading...</h1>
+        return(
+            <div className="full-height">
+                <h1>Loading...</h1>
+            </div>
+        ) 
     }
 
     const handleChange =(e) => {
