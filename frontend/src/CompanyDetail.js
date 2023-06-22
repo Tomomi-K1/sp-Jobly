@@ -3,6 +3,7 @@ import { useParams, Redirect } from "react-router-dom";
 import JoblyApi from './api'
 import JobCard from "./JobCard";
 import UserContext from "./UserContext";
+import Loader from "./Loader";
 
 const CompanyDetail = () => {
     const {currUser} = useContext(UserContext);
@@ -20,7 +21,7 @@ const CompanyDetail = () => {
     }, [])
 
     if(isLoading){
-        return <h1>Loading...</h1>
+       return <Loader />
     }
 
     if(!currUser){

@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import { Form, Row, Col, Label, Input, Button} from "reactstrap";
 import JobCard from "./JobCard";
 import UserContext from './UserContext';
+import Loader from "./Loader";
 
 const JobsList = () => {
     const {currUser} = useContext(UserContext);
@@ -25,11 +26,7 @@ const JobsList = () => {
     }, [])
 
     if(isLoading){
-        return(
-            <div className="full-height">
-                <h1>Loading...</h1>
-            </div>
-        ) 
+        return <Loader />
     }
 
     const handleChange =(e) => {

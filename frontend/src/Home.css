@@ -10,6 +10,10 @@ a:hover {
 
 .Home-container{
     margin-top: 100px;
+    /* background-image: url(./image-jobly.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center; */
 }
 
 .Home-container h1{

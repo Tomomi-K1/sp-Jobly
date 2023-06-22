@@ -2,6 +2,7 @@ import React, {useContext, useState} from "react";
 import {Form, FormGroup, Label, Input, Button} from "reactstrap";
 import UserContext from "./UserContext";
 import { useHistory } from "react-router-dom";
+import Loader from "./Loader";
 
 
 
@@ -42,11 +43,8 @@ const SignupForm = () => {
     }
     
     if(isLoading){
-        return(
-            <div className="full-height">
-                <h1>Loading...</h1>
-            </div>
-        ) 
+    
+        return <Loader />;
     }
     return (
     

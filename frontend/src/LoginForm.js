@@ -2,6 +2,7 @@ import React, {useContext, useState} from "react";
 import {Form, FormGroup, Label, Input, Button} from "reactstrap";
 import { useHistory } from "react-router-dom";
 import UserContext from "./UserContext";
+import Loader from './Loader';
 
 
 const LoginForm = () => {
@@ -40,11 +41,7 @@ const LoginForm = () => {
     }
 
     if(isLoading){
-        return(
-            <div className="full-height">
-                <h1>Loading...</h1>
-            </div>
-        ) 
+        return <Loader />;
     }
     return (
         <div className ='col-mid-6 col-lg-4 offset-md-3 offset-lg-4 full-height'>

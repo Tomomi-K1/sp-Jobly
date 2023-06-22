@@ -5,6 +5,7 @@ import JoblyApi from './api'
 import { Form, Row, Col, Label, Input, Button} from "reactstrap";
 import './CompaniesList.css';
 import UserContext from "./UserContext";
+import Loader from "./Loader";
 
 const CompaniesList =() => {
     const {currUser} = useContext(UserContext);
@@ -25,11 +26,7 @@ const CompaniesList =() => {
     }, [])
 
     if(isLoading){
-        return(
-            <div className="full-height">
-                <h1>Loading...</h1>
-            </div>
-        ) 
+        return <Loader />;
     }
     // console.log(companies);
 
